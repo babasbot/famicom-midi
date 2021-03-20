@@ -1,4 +1,5 @@
 .include "constants.inc"
+.include "notes.inc"
 .include "header.inc"
 
 .segment "CODE"
@@ -14,15 +15,19 @@
 
 .export main
 .proc main
-  LDX PPUSTATUS
-  LDX #$3f
-  STX PPUADDR
-  LDX #$00
-  STX PPUADDR
-  LDA #$29
-  STA PPUDATA
-  LDA #%00011110
-  STA PPUMASK
+  ; enables the square 1 channel
+  LDA #%00000001
+  STA APUFLAGS
+
+  ; sets the square channel 1 duty cycle to 50% and max volume
+  LDA #%10111111
+  STA SQ1_ENV
+
+  ; plays an A4 note on the square channel
+  LDA #A4
+  STA SQ1_LO
+  LDA #$00
+  STA SQ1_HI
 
 forever:
   JMP forever
